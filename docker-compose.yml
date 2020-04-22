@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  qdb:
+    image: mariadb:10.3
+    container_name: qdb
+    environment:
+      - TZ=Asia/Seoul
+      - MYSQL_ROOT_PASSWORD=qems#1234
+      - MYSQL_DATABASE=qems
+      - MYSQL_USER=qems
+      - MYSQL_PASSWORD=qems#1234
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mariadb:/docker-entrypoint-initdb.d:ro
+      - mysql:/var/lib/mysql
+    command: ["--character_set_server=utf8", "--lower_case_table_names=1"]
+
+  qems:
+    build:
+      context: qems
+      args:
+        WEBHOME: /usr/local/tomcat
+        APIHOME: /usr/local/tomcat_api
+    image: tomcat:qems
+    container_name: qems
+    depends_on:
+      - qdb
+    environment:
+      - TZ=Asia/Seoul
+      - WEBHOME=/usr/local/tomcat
+      - APIHOME=/usr/local/tomcat_api
+      - CATALINA_HOME=
+    ports:
+      - 8081:8081
+    volumes:
+      - ./logw:/usr/local/tomcat/logs
+      - ./loga:/usr/local/tomcat_api/logs
+    logging:
+      driver: "none"
+    command: bash -c "
+      echo > /dev/tcp/qdb/3306; while [ $$? -ne 0 ]; do echo > /dev/tcp/qdb/3306; sleep 2; done
+      && echo \"127.0.0.1 qems\" >> /etc/hosts
+      && /usr/local/tomcat_api/bin/catalina.sh start
+      && /usr/local/tomcat/bin/catalina.sh run
+      "
+
+volumes:
+  mysql:

@@ -1,0 +1,4 @@
+log*/*
+QEMS_Admin.war
+QEMS_API.war
+.tmp/*
