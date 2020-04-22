@@ -1,5 +1,8 @@
 # qems
 IDQ QEMS docker runtime
+## main features
+ * mariadb 10.3
+ * tomcat 8.5.38 : to run two tomcat instances in one container
 
 # Prerequisite
 ## 3rd party library
