@@ -5,11 +5,11 @@ services:
     image: mariadb:10.3
     container_name: qdb
     environment:
-      - TZ=Asia/Seoul
-      - MYSQL_ROOT_PASSWORD=qems#1234
-      - MYSQL_DATABASE=qems
-      - MYSQL_USER=qems
-      - MYSQL_PASSWORD=qems#1234
+      - TZ=$TZ
+      - MYSQL_ROOT_PASSWORD=$DB_ROOT_PWD
+      - MYSQL_DATABASE=$DB_NAME
+      - MYSQL_USER=$DB_USER
+      - MYSQL_PASSWORD=$DB_USER_PWD
     ports:
       - 3306:3306
     volumes:
@@ -21,22 +21,22 @@ services:
     build:
       context: qems
       args:
-        WEBHOME: /usr/local/tomcat
-        APIHOME: /usr/local/tomcat_api
+        WEBHOME: $WEBHOME
+        APIHOME: $APIHOME
     image: tomcat:qems
     container_name: qems
     depends_on:
       - qdb
     environment:
       - TZ=Asia/Seoul
-      - WEBHOME=/usr/local/tomcat
-      - APIHOME=/usr/local/tomcat_api
+      - WEBHOME=$WEBHOME
+      - APIHOME=$APIHOME
       - CATALINA_HOME=
     ports:
       - 8081:8081
     volumes:
-      - ./logw:/usr/local/tomcat/logs
-      - ./loga:/usr/local/tomcat_api/logs
+      - ./logw:${WEBHOME}/logs
+      - ./loga:${APIHOME}/logs
     logging:
       driver: "none"
     command: bash -c "
