@@ -28,7 +28,7 @@ services:
     depends_on:
       - qdb
     environment:
-      - TZ=Asia/Seoul
+      - TZ=$TZ
       - WEBHOME=$WEBHOME
       - APIHOME=$APIHOME
       - CATALINA_HOME=

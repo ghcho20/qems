@@ -16,7 +16,7 @@ RUN rm -rf $WEBHOME/webapps/* && \
 	unzip /tmp/QEMS_Admin.war -d $WEBHOME/webapps/ROOT && \
 		rm -f /tmp/QEMS_Admin.war && \
 	cd $WEBHOME/webapps/ROOT/WEB-INF/classes/config/properties && \
-	sed -i -e "/server\.mode/ s/LOCAL/DEBUG/" -e "s/false/true/" common.properties && \
+	sed -i -e "/server\.mode/ s/LOCAL/WARN/" -e "s/false/true/" common.properties && \
 	sed -i -e "/^#.*$/d" -e "s/\/\/.\+:.*$/\/\/qdb:3306\/qems/" conf.properties && \
 	sed -i -e "1 s/DEBUG/WARN/" log4j.properties && \
 	tar xvfz /tmp/jce-policy-8.tar.gz -C $JAVA_HOME/jre/lib/security && \
