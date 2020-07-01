@@ -1,4 +1,4 @@
-FROM tomcat:8.5.54-jdk8-openjdk
+FROM tomcat:8.5.38
 
 ARG WEBHOME
 ARG APIHOME
@@ -19,7 +19,7 @@ RUN rm -rf $WEBHOME/webapps/* && \
 	sed -i -e "/server\.mode/ s/LOCAL/WARN/" -e "s/false/true/" common.properties && \
 	sed -i -e "/^#.*$/d" -e "s/\/\/.\+:.*$/\/\/qdb:3306\/qems/" conf.properties && \
 	sed -i -e "1 s/DEBUG/WARN/" log4j.properties && \
-	tar xvfz /tmp/jce-policy-8.tar.gz -C $JAVA_HOME/jre/lib/security && \
+	tar xvfz /tmp/jce-policy-8.tar.gz -C $JAVA_HOME/lib/security && \
 		rm -f /tmp/jce-policy-8.tar.gz && \
 	\
 	unzip /tmp/QEMS_API.war -d $APIHOME/webapps/qt-oms && \
